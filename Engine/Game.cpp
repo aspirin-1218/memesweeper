@@ -39,8 +39,24 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (wnd.mouse.LeftIsPressed()) {
-		field.OnRevealClick(wnd.mouse.GetPos());
+	//check if anything in the queue is to be processed.
+	while (!wnd.mouse.IsEmpty())
+	{
+		auto e = wnd.mouse.Read();
+		if (e.GetType() == Mouse::Event::Type::LPress)
+		{
+			const Vei2 mousePos = wnd.mouse.GetPos();
+			if (field.GetRect().Contains(mousePos)) {
+				field.OnRevealClick(mousePos);
+			}
+		}
+		else if (e.GetType() == Mouse::Event::Type::RPress) {
+			const Vei2 mousePos = wnd.mouse.GetPos();
+			if (field.GetRect().Contains(mousePos)) {
+				field.OnFlagClick(mousePos);
+			}
+
+		}
 	}
 }
 
